@@ -41,39 +41,66 @@ public class RedstoneCounter extends JavaPlugin {
 //normalize displaynames for redstone components
     private void setupDisplayNames() {
         displayNames.put("REDSTONE_WIRE", "Redstone Dust");
-        displayNames.put("REDSTONE_BLOCK", "Block of Redstone");
-        displayNames.put("REDSTONE_TORCH", "Redstone Torch");
-        displayNames.put("REDSTONE_LAMP", "Redstone Lamp");
+        displayNames.put("REDSTONE_BLOCK", "Blocks of Redstone");
+        displayNames.put("REDSTONE_TORCH", "Redstone Torches");
+        displayNames.put("REDSTONE_LAMP", "Redstone Lamps");
         displayNames.put("REPEATER", "Repeaters");
         displayNames.put("COMPARATOR", "Comparators");
         displayNames.put("OBSERVER", "Observers");
         try {
                 Material crafter = Material.matchMaterial("CRAFTER");
                 if (crafter != null) {
-                    displayNames.put(crafter.name(), "Crafter");
+                    displayNames.put(crafter.name(), "Crafters");
              }
           } catch (Exception ignored) {
            }
+        displayNames.put("COPPER_BULB", "Copper Bulbs");
+        displayNames.put("EXPOSED_COPPER_BULB", "Copper Bulbs");
+        displayNames.put("WEATHERED_COPPER_BULB", "Copper Bulbs");
+        displayNames.put("OXIDIZED_COPPER_BULB", "Copper Bulbs");
+        displayNames.put("WAXED_COPPER_BULB", "Copper Bulbs");
+        displayNames.put("WAXED_EXPOSED_COPPER_BULB", "Copper Bulbs");
+        displayNames.put("WAXED_WEATHERED_COPPER_BULB", "Copper Bulbs");
+        displayNames.put("WAXED_OXIDIZED_COPPER_BULB", "Copper Bulbs");
+
+        try {
+            Material vault = Material.matchMaterial("VAULT");
+            if (vault != null) {
+                displayNames.put(vault.name(), "Vaults");
+            }
+        } catch (Exception ignored) {
+        }
+
+        try {
+            Material trialSpawner = Material.matchMaterial("TRIAL_SPAWNER");
+            if (trialSpawner != null) {
+                displayNames.put(trialSpawner.name(), "Trial Spawners");
+            }
+        } catch (Exception ignored) {
+        }
         displayNames.put("PISTON", "Pistons");
         displayNames.put("STICKY_PISTON", "Sticky Pistons");
-        displayNames.put("SLIME_BLOCK", "Slime Block");
-        displayNames.put("HONEY_BLOCK", "Honey Block");
+        displayNames.put("SLIME_BLOCK", "Slime Blocks");
+        displayNames.put("HONEY_BLOCK", "Honey Blocks");
         displayNames.put("HOPPER", "Hoppers");
         displayNames.put("DROPPER", "Droppers");
         displayNames.put("DISPENSER", "Dispensers");
         displayNames.put("CHISELED_BOOKSHELF", "Chiseled Bookshelf");
-        displayNames.put("RAIL", "Normal Rail");
-        displayNames.put("POWERED_RAIL", "Powered Rail");
-        displayNames.put("DETECTOR_RAIL", "Detector Rail");
-        displayNames.put("ACTIVATOR_RAIL", "Activator Rail");
-        displayNames.put("LEVER", "Lever");
-        displayNames.put("TARGET", "Target Block");
-        displayNames.put("DAYLIGHT_DETECTOR", "Daylight Detector");
-        displayNames.put("SCULK_SENSOR", "Sculk Sensor");
-        displayNames.put("CALIBRATED_SCULK_SENSOR", "Calibrated Sculk Sensor");
-        displayNames.put("TRIPWIRE_HOOK", "Tripwire Hook");
-        displayNames.put("TRAPPED_CHEST", "Trapped Chest");
-        displayNames.put("LECTERN", "Lectern");
+        displayNames.put("RAIL", "Normal Rails");
+        displayNames.put("POWERED_RAIL", "Powered Rails");
+        displayNames.put("DETECTOR_RAIL", "Detector Rails");
+        displayNames.put("ACTIVATOR_RAIL", "Activator Rails");
+        displayNames.put("LEVER", "Levers");
+        displayNames.put("TARGET", "Target Blocks");
+        displayNames.put("DAYLIGHT_DETECTOR", "Daylight Detectors");
+        displayNames.put("SCULK_SENSOR", "Sculk Sensors");
+        displayNames.put("CALIBRATED_SCULK_SENSOR", "Calibrated Sculk Sensors");
+        displayNames.put("TRIPWIRE_HOOK", "Tripwire Hooks");
+        displayNames.put("TRAPPED_CHEST", "Trapped Chests");
+        displayNames.put("LECTERN", "Lecterns");
+        displayNames.put("REDSTONE_ORE", "Redstone Ore");
+        displayNames.put("NOTE_BLOCK", "Note Blocks");
+        displayNames.put("JUKEBOX", "Jukebox");
     }
 //perms, reloading and block count
     @Override
@@ -111,40 +138,77 @@ public class RedstoneCounter extends JavaPlugin {
                 }
             }
         }
-//chat output with normalized display names
+
+        combineCounts(counts);
+        //chat output with normalized display names
         player.sendMessage(ChatColor.GRAY + "---------------------");
         player.sendMessage(ChatColor.GOLD + "Redstone in this chunk:");
         player.sendMessage("");
 
-        for (String blockName : blockTypes) {
-            int current = counts.get(blockName);
-            int max = maxAmounts.getOrDefault(blockName, 0);
+        Map<String, Integer> outputCounts = new HashMap<>();
 
-            String maxDisplay;
-            ChatColor countColor;
-            ChatColor maxColor;
+		for (Map.Entry<String, Integer> entry : counts.entrySet()) {
+			String name = entry.getKey();
 
-            if (max <= 0) { 
-                maxDisplay = "∞";
-                countColor = ChatColor.GREEN;
-                maxColor = ChatColor.GRAY;
-            } else if (current >= max) {
-                maxDisplay = String.valueOf(max);
-                countColor = ChatColor.RED;
-                maxColor = ChatColor.RED;
-            } else {
-                maxDisplay = String.valueOf(max);
-                countColor = ChatColor.GREEN;
-                maxColor = ChatColor.GRAY;
-            }
+			if (name.contains("COPPER_BULB")) {
+				outputCounts.merge("COPPER_BULB", entry.getValue(), Integer::sum);
+			} else {
+				outputCounts.put(name, entry.getValue());
+			}
+		}
 
-            String display = displayNames.getOrDefault(blockName, blockName);
-            player.sendMessage(display + ": " + countColor + current + ChatColor.GRAY + "/" + maxColor + maxDisplay);
-        }
+		for (String blockName : outputCounts.keySet()) {
+			int current = outputCounts.getOrDefault(blockName, 0);
+			int max = maxAmounts.getOrDefault(blockName, 0);
 
-        player.sendMessage(ChatColor.GRAY + "---------------------");
-        return true;
+			String maxDisplay;
+			ChatColor countColor;
+			ChatColor maxColor;
+
+			if (max <= 0) {
+				maxDisplay = "∞";
+				countColor = ChatColor.GREEN;
+				maxColor = ChatColor.GRAY;
+			} else if (current >= max) {
+				maxDisplay = String.valueOf(max);
+				countColor = ChatColor.RED;
+				maxColor = ChatColor.RED;
+			} else {
+				maxDisplay = String.valueOf(max);
+				countColor = ChatColor.GREEN;
+				maxColor = ChatColor.GRAY;
+			}
+
+			String display = displayNames.getOrDefault(blockName, blockName);
+			player.sendMessage(display + ": " + countColor + current + ChatColor.GRAY + "/" + maxColor + maxDisplay);
+		}
+
+			return true;
+	
+	}
+
+private void combineCounts(Map<String, Integer> counts) {
+
+    int copperBulbs = 0;
+
+    String[] copperVariants = {
+            "COPPER_BULB",
+            "EXPOSED_COPPER_BULB",
+            "WEATHERED_COPPER_BULB",
+            "OXIDIZED_COPPER_BULB",
+            "WAXED_COPPER_BULB",
+            "WAXED_EXPOSED_COPPER_BULB",
+            "WAXED_WEATHERED_COPPER_BULB",
+            "WAXED_OXIDIZED_COPPER_BULB"
+    };
+
+    for (String variant : copperVariants) {
+        copperBulbs += counts.getOrDefault(variant, 0);
+        counts.remove(variant);
     }
+
+    counts.put("COPPER_BULB", copperBulbs);
+}
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
