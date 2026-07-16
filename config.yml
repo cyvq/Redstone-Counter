@@ -1,0 +1,63 @@
+# List of blocks to count, just add or remove blocks here. Then you can set a max value for them below.
+# If you dont set a value it will default to "∞"
+
+# The Plugin supports normalized names for most redstone components, e.g "STICKY_PISTON" becomes "Sticky Piston" in the Chat Output.
+# You can just remove the "#" to enable a block, or you add you own. All Blocks below have normalized Names.
+
+blocks:
+  # - REDSTONE_WIRE
+  # - REDSTONE_BLOCK
+  # - REDSTONE_TORCH
+  # - REDSTONE_LAMP
+  # - REDSTONE_ORE
+
+  # - REPEATER
+  # - COMPARATOR
+  # - OBSERVER
+  # - TARGET
+
+   - PISTON
+  # - STICKY_PISTON
+  # - SLIME_BLOCK
+  # - HONEY_BLOCK
+   - HOPPER
+  # - DROPPER
+  # - DISPENSER
+
+  # - RAIL
+  # - POWERED_RAIL
+  # - DETECTOR_RAIL
+  # - ACTIVATOR_RAIL
+
+  # - LEVER
+  # - DAYLIGHT_DETECTOR
+  # - SCULK_SENSOR
+  # - CALIBRATED_SCULK_SENSOR
+  # - TRIPWIRE_HOOK
+  # - TRAPPED_CHEST
+  # - NOTE_BLOCK
+  # - LECTERN
+  # - CHISELED_BOOKSHELF
+
+# Copper Bulbs will be merged in the Output even if you enable all of them they will appeaer as "Copper Bulbs: <amount>". this is to avoid clutter. 
+# But you still have to enable all of them if you want them all counted, otherwise it is only counting the enabled ones.
+  # - COPPER_BULB
+  # - EXPOSED_COPPER_BULB
+  # - WEATHERED_COPPER_BULB
+  # - OXIDIZED_COPPER_BULB
+  # - WAXED_COPPER_BULB
+  # - WAXED_EXPOSED_COPPER_BULB
+  # - WAXED_WEATHERED_COPPER_BULB
+  # - WAXED_OXIDIZED_COPPER_BULB
+
+  # - CRAFTER
+
+
+# Displays the maximum allowed blocks per chunk (must be enforced by another plugin like MobFarmManager or any redstone limiter).
+# This purely a QoL and cosmetic feature.
+# Set to 0 or -1 to display ∞ instead of a max value.
+# If no value is given, it defaults to "∞"
+
+max:
+  PISTON: 16
+  HOPPER: -1
