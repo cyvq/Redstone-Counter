@@ -24,36 +24,6 @@ This plugin however can let your players know the redstone limitations just by t
 redstone.use - Allows a player to use the /redstone command, it is true by default
 redstone.reload- Allows you to reload the config.yml in game, defaults to OP
 
-Config.yml:
-
-
-```
-# List of blocks to count, just add or remove blocks here. Then you can set a max value for them below. 
-# If you dont set a value it will default to "∞"
-# The Plugin supports normalized names for most redstone components, e.g "STICKY_PISTON" becomes "Sticky Piston" in the Chat Output.
-blocks:
-  - PISTON
-  - STICKY_PISTON
-  - REPEATER
-  - COMPARATOR
-  - HOPPER
-  - OBSERVER
-  - DROPPER
-  - DISPENSER
-
-
-# Maximum allowed blocks per chunk (must be enforced by another plugin like MobFarmManager). Set to 0 or -1 to display ∞ inseatd of a max value.
-# If no value is given, it defaults to "∞"
-max:
-  PISTON: 32
-  STICKY_PISTON: 32
-  REPEATER: 32
-  COMPARATOR: 32
-  HOPPER: 32
-  OBSERVER: 16
-
-```
-
 **Source:**
 
 Just check out the source right here:
